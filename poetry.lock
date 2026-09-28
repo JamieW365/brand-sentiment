@@ -207,6 +207,18 @@ files = [
 cli = ["click (>=5.0)"]
 
 [[package]]
+name = "structlog"
+version = "26.1.0"
+description = "Structured Logging for Python"
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "structlog-26.1.0-py3-none-any.whl", hash = "sha256:e081a26d6c373e6d201eca24eede26d8ffab07f88f477822e679183428d3d91e"},
+    {file = "structlog-26.1.0.tar.gz", hash = "sha256:f63a716cbd1b1291cf7661de7794b455acfa4c43c5bcf1630e6ad5ddc1adb3b7"},
+]
+
+[[package]]
 name = "typing-extensions"
 version = "4.16.0"
 description = "Backported and Experimental Type Hints for Python 3.9+"
@@ -236,4 +248,4 @@ typing-extensions = ">=4.15.0"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "3256292c2311d2d6b2fffd631d851a29de79b387f1dbb844a9b6bda815090f28"
+content-hash = "374efd08e4faf273a1541df0c91abfd45efdb7cc1a8a7063d1c6356bd086565e"
