@@ -1,7 +1,8 @@
 import json
+from functools import lru_cache
 import boto3
 from botocore.exceptions import ClientError
-from shared.config.settings import settings
+from shared.config.settings import get_settings  # import factory function, not module-level instance
 from shared.logging.logger import get_logger
 
 
@@ -9,15 +10,20 @@ from shared.logging.logger import get_logger
 logger = get_logger(__name__)
 
 
+@lru_cache  # ensures the boto3 client is created once and reused across all S3Writer instances
+def get_s3_client():  # factory function — returns a single shared authenticated boto3 S3 client
+    return boto3.client(
+        "s3",
+        aws_access_key_id=get_settings().aws_access_key_id,       # AWS access key from settings
+        aws_secret_access_key=get_settings().aws_secret_access_key, # AWS secret key from settings
+        region_name=get_settings().aws_region,                      # AWS region from settings
+    )
+
+
 class S3Writer:
     def __init__(self):
-        self.bucket_name = settings.s3_bucket_name
-        self.client = boto3.client(
-            "s3",
-            aws_access_key_id=settings.aws_access_key_id,
-            aws_secret_access_key=settings.aws_secret_access_key,
-            region_name=settings.aws_region,
-        )
+        self.bucket_name = get_settings().s3_bucket_name  # retrieves bucket name from cached settings
+        self.client = get_s3_client()  # retrieves the cached boto3 client rather than creating a new one
 
     def write_json(self, data: dict, s3_key: str) -> None:
         try:
