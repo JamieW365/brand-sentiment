@@ -14,7 +14,7 @@ def setup_logging(log_level: str = "INFO") -> None:
             structlog.stdlib.add_logger_name,
             structlog.processors.TimeStamper(fmt="iso"),
             structlog.processors.StackInfoRenderer(),
-            structlog.processors.format_exc_info,
+            structlog.processors.ExceptionRenderer(),
             structlog.processors.JSONRenderer(),
         ],
         wrapper_class=structlog.stdlib.BoundLogger,
