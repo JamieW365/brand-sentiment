@@ -27,7 +27,7 @@ packages = [
 optional = true  # this group is not installed by default — services opt in explicitly
 
 [tool.poetry.group.db.dependencies]
-sqlalchemy = ">=2.1.1,<3.0.0"  # async ORM — needed by API and migration services only
+sqlalchemy = {version = ">=2.1.1,<3.0.0", extras = ["asyncio"]}  # asyncio extra installs greenlet, required for async SQLAlchemy
 asyncpg = ">=0.31.0,<0.32.0"   # async postgres driver — required by sqlalchemy async engine
 
 [tool.poetry.group.aws]
