@@ -9,8 +9,8 @@ license = "MIT"
 readme = "README.md"
 requires-python = "^3.12"
 dependencies = [
-    "pydantic-settings (>=2.15.0,<3.0.0)",  # universally needed — config is used everywhere
-    "structlog (>=26.1.0,<27.0.0)",          # universally needed — logging is used everywhere
+    "pydantic-settings (>=2.15.0,<3.0.0)",
+    "structlog (>=26.1.0,<27.0.0)",
 ]
 
 
@@ -20,25 +20,25 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 packages = [
-    { include = "shared" }  # registers shared/ as an importable internal package
+    { include = "shared" }
 ]
 
 [tool.poetry.group.db]
-optional = true  # this group is not installed by default — services opt in explicitly
+optional = true
 
 [tool.poetry.group.db.dependencies]
-sqlalchemy = {version = ">=2.1.1,<3.0.0", extras = ["asyncio"]}  # asyncio extra installs greenlet, required for async SQLAlchemy
-asyncpg = ">=0.31.0,<0.32.0"   # async postgres driver — required by sqlalchemy async engine
+sqlalchemy = {version = ">=2.1.1,<3.0.0", extras = ["asyncio"]}
+asyncpg = ">=0.31.0,<0.32.0"
 
 [tool.poetry.group.aws]
-optional = true  # this group is not installed by default — services opt in explicitly
+optional = true
 
 [tool.poetry.group.aws.dependencies]
-boto3 = ">=1.43.103,<2.0.0"  # AWS SDK — needed by ingestion scrapers and ETL jobs only
+boto3 = ">=1.43.103,<2.0.0"
 
 [tool.poetry.group.dev]
-optional = true  # development only tools — never installed in production or CI environments
+optional = true
 
 [tool.poetry.group.dev.dependencies]
-pytest = ">=8.0.0"          # test runner — added now, test packages will be added in later phases
-pytest-asyncio = ">=0.23.0" # async test support for testing FastAPI and SQLAlchemy async code
+pytest = ">=8.0.0"
+pytest-asyncio = ">=0.23.0"
