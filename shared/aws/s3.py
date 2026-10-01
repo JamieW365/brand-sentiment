@@ -37,6 +37,37 @@ class S3Writer:
             logger.error("failed to write to s3", bucket=self.bucket_name, key=s3_key, error=str(e))
             raise
 
+    def write_jsonl(self, records: list[dict], s3_key: str) -> None:
+        # Serialise each dict to a compact JSON string, one per line.
+        # JSONL (newline-delimited JSON) is the standard format for PySpark ingestion —
+        # each line is a self-contained JSON object, so Spark can split the file
+        # across executors and parallelise reads without parsing the whole file first.
+        jsonl_body = "\n".join(json.dumps(record, ensure_ascii=False) for record in records)
+
+        try:
+            self.client.put_object(
+                Bucket=self.bucket_name,
+                Key=s3_key,
+                # Encode to bytes — boto3's put_object requires a bytes-like body
+                Body=jsonl_body.encode("utf-8"),
+                ContentType="application/x-ndjson",  # MIME type for JSONL
+            )
+            # Structlog keyword args — these become structured fields in JSON output
+            logger.info(
+                "wrote jsonl to s3",
+                bucket=self.bucket_name,
+                key=s3_key,
+                record_count=len(records),
+            )
+        except ClientError as e:
+            logger.error(
+                "failed to write jsonl to s3",
+                bucket=self.bucket_name,
+                key=s3_key,
+                error=str(e),
+            )
+            raise
+
     def read_json(self, s3_key: str) -> dict:
         try:
             response = self.client.get_object(
