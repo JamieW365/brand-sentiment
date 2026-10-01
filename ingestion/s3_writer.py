@@ -4,7 +4,7 @@ from shared.aws.s3 import S3Writer as SharedS3Writer  # The shared boto3 wrapper
 from shared.logging.logger import get_logger          # Shared structlog logger
 
 
-class IngestionS3Writer:
+class S3Writer:
     """Ingestion-specific S3 writer.
 
     Wraps shared.aws.s3.S3Writer to add:

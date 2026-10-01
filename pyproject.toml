@@ -42,3 +42,6 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 pytest = ">=8.0.0"
 pytest-asyncio = ">=0.23.0"
+[tool.poetry.group.ingestion.dependencies]
+requests = "^2.34.2"
+
