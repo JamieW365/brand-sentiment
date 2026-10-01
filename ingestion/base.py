@@ -27,38 +27,38 @@ class BaseScraper(ABC):
         # can be filtered or routed by source in CloudWatch or any log aggregator.
         self.logger = get_logger(__name__)
 
-        @abstractmethod
-        def scrape(self) -> list[dict]:
-            """Fetch raw records from the data source.
+    @abstractmethod
+    def scrape(self) -> list[dict]:
+        """Fetch raw records from the data source.
 
-            Must be implemented by every subclass. Return one dict per record
-            (review, post, article etc.) — raw data only, no transformation.
-            S3Writer handles serialisation; the ETL layer handles normalisation.
-            """
-            pass
+        Must be implemented by every subclass. Return one dict per record
+        (review, post, article etc.) — raw data only, no transformation.
+        S3Writer handles serialisation; the ETL layer handles normalisation.
+        """
+        pass
 
-        def run(self) -> list[dict]:
-            """Public entrypoint called by Airflow operators and Makefile targets.
+    def run(self) -> list[dict]:
+        """Public entrypoint called by Airflow operators and Makefile targets.
 
-            Wraps scrape() with consistent logging so every subclass gets
-            observability without duplicating log calls.
-            """
-            # Structlog keyword args become structured JSON fields —
-            # searchable and filterable in any downstream log system.
-            self.logger.info(
-                "scrape started",
-                source=self.source_name,
-                started_at=datetime.now(timezone.utc).isoformat(),
-            )
+        Wraps scrape() with consistent logging so every subclass gets
+        observability without duplicating log calls.
+        """
+        # Structlog keyword args become structured JSON fields —
+        # searchable and filterable in any downstream log system.
+        self.logger.info(
+            "scrape started",
+            source=self.source_name,
+            started_at=datetime.now(timezone.utc).isoformat(),
+        )
 
-            records = self.scrape()
+        records = self.scrape()
 
-            # Record count logged at completion — a sudden drop to 0 on an
-            # active source is a useful signal for an Airflow alert later.
-            self.logger.info(
-                "scrape complete",
-                source=self.source_name,
-                record_count=len(records),
-            )
+        # Record count logged at completion — a sudden drop to 0 on an
+        # active source is a useful signal for an Airflow alert later.
+        self.logger.info(
+            "scrape complete",
+            source=self.source_name,
+            record_count=len(records),
+        )
 
-            return records
+        return records
