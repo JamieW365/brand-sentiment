@@ -45,3 +45,9 @@ pytest-asyncio = ">=0.23.0"
 [tool.poetry.group.ingestion.dependencies]
 requests = "^2.34.2"
 
+[tool.pytest.ini_options]
+# Adds the repo root to sys.path so root-relative imports resolve correctly
+# in all environments — local, CI, and across different Python tooling.
+pythonpath = ["."]
+# Tells pytest where to look for tests rather than scanning the whole repo.
+testpaths = ["ingestion/tests"]
