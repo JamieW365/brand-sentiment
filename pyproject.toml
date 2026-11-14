@@ -47,6 +47,9 @@ ruff = "^0.16.10"
 [tool.poetry.group.ingestion.dependencies]
 requests = "^2.34.2"
 
+[tool.poetry.group.etl.dependencies]
+pyspark = ">=3.5,<3.6"
+
 [tool.pytest.ini_options]
 # Adds the repo root to sys.path so root-relative imports resolve correctly
 # in all environments — local, CI, and across different Python tooling.

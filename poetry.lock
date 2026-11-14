@@ -629,6 +629,18 @@ dev = ["pre-commit", "tox"]
 testing = ["coverage", "pytest", "pytest-benchmark"]
 
 [[package]]
+name = "py4j"
+version = "0.10.9.9"
+description = "Enables Python programs to dynamically access arbitrary Java objects"
+optional = false
+python-versions = "*"
+groups = ["etl"]
+files = [
+    {file = "py4j-0.10.9.9-py2.py3-none-any.whl", hash = "sha256:c7c26e4158defb37b0bb124933163641a2ff6e3a3913f7811b0ddbe07ed61533"},
+    {file = "py4j-0.10.9.9.tar.gz", hash = "sha256:f694cad19efa5bd1dee4f3e5270eb406613c974394035e5bfc4ec1aba870b879"},
+]
+
+[[package]]
 name = "pydantic"
 version = "2.13.5"
 description = "Data validation using Python type hints"
@@ -821,6 +833,27 @@ files = [
 
 [package.extras]
 windows-terminal = ["colorama (>=0.4.6)"]
+
+[[package]]
+name = "pyspark"
+version = "3.5.9"
+description = "Apache Spark Python API"
+optional = false
+python-versions = ">=3.8"
+groups = ["etl"]
+files = [
+    {file = "pyspark-3.5.9.tar.gz", hash = "sha256:ea27adc39ddac9413b8951e45aa748cbed6c785971b81386efc41938f6243d93"},
+]
+
+[package.dependencies]
+py4j = ">=0.10.9.7,<0.10.9.10"
+
+[package.extras]
+connect = ["googleapis-common-protos (>=1.56.4)", "grpcio (>=1.56.0)", "grpcio-status (>=1.56.0)", "numpy (>=1.15,<2)", "pandas (>=1.0.5)", "pyarrow (>=4.0.0)"]
+ml = ["numpy (>=1.15,<2)"]
+mllib = ["numpy (>=1.15,<2)"]
+pandas-on-spark = ["numpy (>=1.15,<2)", "pandas (>=1.0.5)", "pyarrow (>=4.0.0)"]
+sql = ["numpy (>=1.15,<2)", "pandas (>=1.0.5)", "pyarrow (>=4.0.0)"]
 
 [[package]]
 name = "pytest"
@@ -1149,4 +1182,4 @@ zstd = ["backports-zstd (>=1.0.0) ; python_version < \"3.14\""]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "1ce4ccba8797209518427f8770c585cd6cfaa334d7b0c2252096d195ddf7b835"
+content-hash = "272f5d84aa7afe56e05bed878cf2239ced9594f134e9ad5ae9c39233dfaee0b0"
