@@ -55,4 +55,4 @@ pyspark = ">=3.5,<3.6"
 # in all environments — local, CI, and across different Python tooling.
 pythonpath = ["."]
 # Tells pytest where to look for tests rather than scanning the whole repo.
-testpaths = ["ingestion/tests", "shared/tests"]
+testpaths = ["ingestion/tests", "shared/tests", "etl/tests"]
