@@ -4,22 +4,14 @@ from pyspark.sql import DataFrame
 # functions is conventionally imported as F: F.col, F.lit, F.trim...
 from pyspark.sql import functions as F
 
+from etl.schemas.reviews import REQUIRED_COLUMNS, REVIEWS_COLUMNS
+
 # The source tag stored on every row. Constant here because this transform
 # only handles Yelp; other sources will get their own transform module.
 SOURCE = "yelp_api"
 
 # Spark's pattern syntax (not Python's strftime), for "2026-10-01 12:34:56".
 TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss"
-
-# The exact columns and order the Postgres writer expects. created_at is
-# omitted on purpose: Postgres fills it in with its server default.
-REVIEWS_COLUMNS = [
-    "id", "source", "business_id", "business_name", "review_id",
-    "text", "rating", "review_date", "scraped_at",
-]
-
-# Columns that are NOT NULL in the reviews table.
-REQUIRED_COLUMNS = ["business_id", "business_name", "review_id", "text"]
 
 
 def transform_yelp_reviews(raw: DataFrame, scraped_at: datetime) -> DataFrame:

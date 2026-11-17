@@ -2,29 +2,13 @@ import uuid
 from datetime import datetime, timezone
 
 import pytest
-from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 
 from etl.schemas.yelp import YELP_RAW_SCHEMA
-from etl.transforms.yelp import REVIEWS_COLUMNS, transform_yelp_reviews
+from etl.transforms.yelp import transform_yelp_reviews
+from etl.schemas.reviews import REVIEWS_COLUMNS
 
 SCRAPED_AT = datetime(2026, 10, 1, tzinfo=timezone.utc)
-
-
-@pytest.fixture(scope="session")
-def spark():
-    """One local Spark session shared by every test (starting Spark is slow)."""
-    session = (
-        SparkSession.builder
-        .master("local[1]")                                 # one thread, no cluster
-        .appName("etl-tests")
-        .config("spark.sql.session.timeZone", "UTC")        # matches the Glue job's assumption
-        .config("spark.sql.shuffle.partitions", "1")        # tiny data, so skip the 200-partition default
-        .config("spark.ui.enabled", "false")                # no web UI port needed
-        .getOrCreate()
-    )
-    yield session
-    session.stop()
 
 
 def make_raw(**overrides) -> dict:
