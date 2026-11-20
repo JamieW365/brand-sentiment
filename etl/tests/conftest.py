@@ -1,6 +1,8 @@
 import pytest
+import psycopg2
 from pyspark.sql import SparkSession
 
+from etl.tests.db_helpers import TEST_DSN, delete_test_rows
 
 @pytest.fixture(scope="session")
 def spark():
@@ -16,3 +18,16 @@ def spark():
     )
     yield session
     session.stop()
+
+
+@pytest.fixture
+def dsn():
+    """A DSN for a reachable Postgres, with test rows cleaned before and after."""
+    try:
+        connection = psycopg2.connect(TEST_DSN)
+    except psycopg2.OperationalError:
+        pytest.skip("Postgres not reachable")
+    delete_test_rows(connection)
+    yield TEST_DSN
+    delete_test_rows(connection)
+    connection.close()
