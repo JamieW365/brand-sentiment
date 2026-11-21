@@ -3,12 +3,12 @@
 # catching the mistake early rather than silently at runtime.
 from abc import ABC, abstractmethod
 
+# Used to stamp each scrape run with a UTC start time in log output.
+from datetime import datetime, timezone
+
 # get_logger returns a structlog BoundLogger configured with JSON output,
 # ISO timestamps, and log level — defined once in shared, used everywhere.
 from shared.logging.logger import get_logger
-
-# Used to stamp each scrape run with a UTC start time in log output.
-from datetime import datetime, timezone
 
 
 class BaseScraper(ABC):

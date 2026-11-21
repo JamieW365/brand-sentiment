@@ -1,12 +1,16 @@
 import asyncio  # Required to run the async migration coroutine from a sync entrypoint
 from logging.config import fileConfig
 
+from alembic import context
 from sqlalchemy import pool
+
 # async_engine_from_config creates an async engine from alembic.ini config —
 # required because our project uses asyncpg, not a sync driver.
-from sqlalchemy.ext.asyncio import async_engine_from_config, AsyncConnection
+from sqlalchemy.ext.asyncio import AsyncConnection, async_engine_from_config
 
-from alembic import context
+# Settings resolves the database URL from .env — same source of truth
+# used by the application, so migrations and the app can never diverge.
+from shared.config.settings import get_settings
 
 # Base holds the metadata Alembic diffs against to autogenerate migrations.
 # All models that inherit from Base are automatically included.
@@ -15,10 +19,6 @@ from shared.db.base import Base
 # Import every model so it registers itself with Base.metadata before
 # autogenerate runs. A missing import = a missing table in the migration.
 from shared.db.models import Review  # noqa: F401
-
-# Settings resolves the database URL from .env — same source of truth
-# used by the application, so migrations and the app can never diverge.
-from shared.config.settings import get_settings
 
 config = context.config
 

@@ -1,8 +1,10 @@
-import requests
 import time
+
+import requests
+
+from ingestion.base import BaseScraper
 from shared.config.settings import get_settings
 from shared.logging.logger import get_logger
-from ingestion.base import BaseScraper
 
 
 class YelpAPIScraper(BaseScraper):
@@ -141,14 +143,14 @@ class YelpAPIScraper(BaseScraper):
 
 
 if __name__ == "__main__":
-    from shared.logging.logger import setup_logging
     from ingestion.s3_writer import S3Writer
+    from shared.logging.logger import setup_logging
 
     # setup_logging() must be called once before any logger is used.
     # When running via Airflow this is called in the DAG file instead.
     setup_logging()
     logger = get_logger(__name__)
-    
+
     # Hardcoded for local runs — will be driven by a Postgres brand lookup in production.
     TARGETS = ["McDonald's", "Greggs", "Pret a Manger"]
 

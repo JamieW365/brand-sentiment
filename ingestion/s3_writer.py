@@ -1,7 +1,7 @@
 from datetime import datetime, timezone  # For constructing the dated S3 partition key
 
 from shared.aws.s3 import S3Writer as SharedS3Writer  # The shared boto3 wrapper
-from shared.logging.logger import get_logger          # Shared structlog logger
+from shared.logging.logger import get_logger  # Shared structlog logger
 
 
 class S3Writer:

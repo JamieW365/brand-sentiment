@@ -1,6 +1,8 @@
-import pytest
 from unittest.mock import MagicMock, patch
+
+import pytest
 import requests
+
 from ingestion.yelp_api.scraper import YelpAPIScraper
 
 
