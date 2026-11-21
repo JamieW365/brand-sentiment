@@ -1,7 +1,9 @@
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
-from typing import AsyncGenerator
-from shared.config.settings import get_settings
 from functools import lru_cache
+from typing import AsyncGenerator
+
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+
+from shared.config.settings import get_settings
 
 
 @lru_cache

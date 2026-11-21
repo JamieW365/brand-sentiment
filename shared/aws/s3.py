@@ -1,10 +1,11 @@
 import json
 from functools import lru_cache
+
 import boto3
 from botocore.exceptions import ClientError
+
 from shared.config.settings import get_settings
 from shared.logging.logger import get_logger
-
 
 logger = get_logger(__name__)
 

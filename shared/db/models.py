@@ -1,12 +1,13 @@
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String, Text, Float, DateTime, UniqueConstraint, Index
-from sqlalchemy.dialects.postgresql import UUID as PgUUID
-from sqlalchemy import func
-# uuid4 generates the primary key value. UUID is the Python type for Mapped[].
-from uuid import uuid4, UUID
 # datetime is the Python type used in Mapped[] annotations.
 # DateTime (SQLAlchemy) is the column type — they are different things.
 from datetime import datetime, timezone
+
+# uuid4 generates the primary key value. UUID is the Python type for Mapped[].
+from uuid import UUID, uuid4
+
+from sqlalchemy import DateTime, Float, Index, String, Text, UniqueConstraint, func
+from sqlalchemy.dialects.postgresql import UUID as PgUUID
+from sqlalchemy.orm import Mapped, mapped_column
 
 # Base is the DeclarativeBase all ORM models must inherit from.
 # Alembic reads Base.metadata to detect and diff schema changes.

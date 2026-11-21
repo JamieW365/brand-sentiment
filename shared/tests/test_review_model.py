@@ -190,7 +190,7 @@ class TestInsertBehaviour:
 
         # Guard against a naive timestamp sneaking in: the default must ask for UTC.
         mock_datetime.now.assert_called_with(timezone.utc)
-        
+
         # SQLite drops tzinfo, so compare against the naive equivalents.
         assert a.scraped_at == t1.replace(tzinfo=None)
         assert b.scraped_at == t2.replace(tzinfo=None)
