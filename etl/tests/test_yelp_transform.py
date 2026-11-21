@@ -4,9 +4,9 @@ from datetime import datetime, timezone
 import pytest
 from pyspark.sql import functions as F
 
+from etl.schemas.reviews import REVIEWS_COLUMNS
 from etl.schemas.yelp import YELP_RAW_SCHEMA
 from etl.transforms.yelp import transform_yelp_reviews
-from etl.schemas.reviews import REVIEWS_COLUMNS
 
 SCRAPED_AT = datetime(2026, 10, 1, tzinfo=timezone.utc)
 

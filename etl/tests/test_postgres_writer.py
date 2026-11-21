@@ -1,29 +1,28 @@
 from datetime import datetime, timezone
 
-import psycopg2
 import pytest
 from pyspark.sql import SparkSession
 
+from etl.schemas.reviews import REVIEWS_COLUMNS
 from etl.schemas.yelp import YELP_RAW_SCHEMA
+from etl.tests.db_helpers import PREFIX, fetch_rows
 from etl.transforms.yelp import transform_yelp_reviews
 from etl.writers.postgres import to_psycopg2_dsn, write_reviews
-from etl.schemas.reviews import REVIEWS_COLUMNS
-from etl.tests.db_helpers import PREFIX, fetch_rows
 
 SCRAPED_AT = datetime(2026, 10, 1, tzinfo=timezone.utc)
 
-# Every row these tests create has a review_id starting with this prefix,
-# which is how cleanup finds them without touching real data.
-PREFIX = "etl-test-"
 
-
-def reviews_df(spark: SparkSession, *ids: str, time_created: str = "2026-10-01 12:34:56", rating=4.0):
+def reviews_df(
+    spark: SparkSession,
+    *ids: str,
+    time_created: str = "2026-10-01 12:34:56",
+    rating: float | None = 4.0,
+):
     """A transformed DataFrame with one review per id, built via the real transform."""
     rows = [
         {
             "id": PREFIX + i,
             "text": f"review {i}",
-            "rating": 4.0,
             "time_created": time_created,
             "business_id": "biz-1",
             "business_name": "Greggs",

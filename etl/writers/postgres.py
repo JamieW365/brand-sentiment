@@ -1,8 +1,9 @@
+import re
 from collections.abc import Iterator
 from itertools import islice
-import re
 
 import psycopg2
+
 # execute_values expands one INSERT into a multi-row VALUES list: much
 # faster than one round trip per row.
 from psycopg2.extras import execute_values
