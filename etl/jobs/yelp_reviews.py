@@ -81,8 +81,8 @@ def run(spark: SparkSession, input_path: str, dsn: str) -> dict[str, int]:
         # Already in Postgres. Approximate: see write_reviews on task retries.
         "rows_skipped_existing": rows_valid - rows_inserted,
     }
-    # The DSN is never logged: it contains the password.
-    # JSON so CloudWatch Logs Insights can parse the counts into fields.
+    # JSON-encoded so the counts can be extracted with a single parse
+    # expression in CloudWatch Logs Insights.
     logger.info("job complete input=%s counts=%s", input_path, json.dumps(counts))
     return counts
 
