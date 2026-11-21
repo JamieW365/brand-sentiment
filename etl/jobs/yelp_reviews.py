@@ -1,4 +1,5 @@
 import argparse
+import json
 import logging
 import os
 import re
@@ -16,8 +17,10 @@ from etl.writers.postgres import to_psycopg2_dsn, write_reviews
 # so it can be shipped to Glue on its own. Glue forwards this to CloudWatch.
 logger = logging.getLogger("etl.yelp_reviews")
 
-# The ingestion layer writes raw/{source}/{YYYY-MM-DD}/data.jsonl.
-PARTITION_DATE = re.compile(r"/(\d{4}-\d{2}-\d{2})/")
+# The ingestion layer writes raw/{source}/{YYYY-MM-DD}/data.jsonl. Anchoring to
+# "/raw/<source>/" means a date elsewhere in the path (a bucket named
+# "2025-01-01", say) can't be mistaken for the partition date.
+PARTITION_DATE = re.compile(r"/raw/[^/]+/(\d{4}-\d{2}-\d{2})/")
 
 
 def scraped_at_from_path(path: str) -> datetime:
@@ -79,7 +82,8 @@ def run(spark: SparkSession, input_path: str, dsn: str) -> dict[str, int]:
         "rows_skipped_existing": rows_valid - rows_inserted,
     }
     # The DSN is never logged: it contains the password.
-    logger.info("job complete input=%s %s", input_path, counts)
+    # JSON so CloudWatch Logs Insights can parse the counts into fields.
+    logger.info("job complete input=%s counts=%s", input_path, json.dumps(counts))
     return counts
 
 
