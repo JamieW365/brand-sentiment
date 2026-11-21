@@ -94,7 +94,9 @@ class TestCleaning:
     def test_rows_missing_required_fields_are_dropped(self, spark, column, bad_value):
         """NULL, empty and whitespace-only values in NOT NULL columns drop the row."""
         # "id" in the raw data is review_id in the output.
-        rows = [make_raw(), make_raw(**{column: bad_value}, **({} if column == "id" else {"id": "rev-bad"}))]
+        rows = [make_raw(),
+                make_raw(**{column: bad_value},
+                         **({} if column == "id" else {"id": "rev-bad"}))]
         result = run_transform(spark, rows)
         assert [r.review_id for r in result.collect()] == ["rev-1"]
 

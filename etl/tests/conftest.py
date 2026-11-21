@@ -12,11 +12,15 @@ def spark():
     """One local Spark session shared by every test (starting Spark is slow)."""
     session = (
         SparkSession.builder
-        .master("local[1]")                                 # one thread, no cluster
+        # One thread, no cluster.
+        .master("local[1]")
         .appName("etl-tests")
-        .config("spark.sql.session.timeZone", "UTC")        # matches the Glue job's assumption
-        .config("spark.sql.shuffle.partitions", "1")        # tiny data, so skip the 200-partition default
-        .config("spark.ui.enabled", "false")                # no web UI port needed
+        # The transform and writer both assume UTC.
+        .config("spark.sql.session.timeZone", "UTC")
+        # Tiny data, so skip the 200-partition default.
+        .config("spark.sql.shuffle.partitions", "1")
+        # No web UI port needed.
+        .config("spark.ui.enabled", "false")
         .getOrCreate()
     )
     yield session
@@ -29,10 +33,9 @@ def dsn():
     try:
         connection = psycopg2.connect(TEST_DSN)
     except psycopg2.OperationalError:
-        # In CI, set REQUIRE_DB=1 so an unreachable database fails the run
-        # instead of silently skipping every integration test.
-        if os.environ.get("REQUIRE_DB"):
-            pytest.fail("Postgres not reachable and REQUIRE_DB is set")
+        # Only REQUIRE_DB=1 turns the skip into a failure; "0" or "" must not.
+        if os.environ.get("REQUIRE_DB") == "1":
+            pytest.fail("Postgres not reachable and REQUIRE_DB=1")
         pytest.skip("Postgres not reachable")
     delete_test_rows(connection)
     yield TEST_DSN
